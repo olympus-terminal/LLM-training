@@ -32,7 +32,7 @@ tokenizer = AutoTokenizer.from_pretrained("state-spaces/mamba-130m-hf", use_spec
 model = AutoModelForCausalLM.from_pretrained("state-spaces/mamba-130m-hf")
 
 # Function to extract zip file and read all text files
-def load_text_from_zip(zip_file_path, sample_size=None, fraction=0.2):
+def load_text_from_zip(zip_file_path, sample_size=None, fraction=1):
     text_data = []
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
         zip_ref.extractall("temp_data")
@@ -62,10 +62,10 @@ dataset = Dataset.from_pandas(dataframe)
 training_args = TrainingArguments(
     output_dir="./results",
     num_train_epochs=1,
-    per_device_train_batch_size=64,
+    per_device_train_batch_size=512,
     logging_dir='./logs',
     logging_steps=100,
-    learning_rate=1e-5,
+    learning_rate=1e-6,
     report_to="wandb"  # Integrate Weights & Biases for tracking
 )
 
@@ -83,7 +83,7 @@ trainer = SFTTrainer(
     peft_config=lora_config,
     train_dataset=dataset,
     dataset_text_field="text",  # Ensure this matches your data's text field
-    max_seq_length=2048,
+    max_seq_length=100,
 )
 
 trainer.train()
