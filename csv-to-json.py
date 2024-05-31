@@ -3,6 +3,8 @@ import json
 import sys
 
 # Function to read the CSV and convert it to a list of dictionaries
+## Make sure your csv has headers 'input' and 'output' columns
+
 def csv_to_self_instruct_json(csv_file_path):
     df = pd.read_csv(csv_file_path)
     data = []
