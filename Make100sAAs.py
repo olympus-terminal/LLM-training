@@ -1,3 +1,5 @@
+#usage python script.py $file
+
 import sys
 import re
 
